@@ -20,7 +20,7 @@ Add `prebuild-ci` to your `"test"` script or CI configuration, like this:
   }
 ```
 
-Also configure your CI environments to set the environment variable `PREBUILD_TOKEN` to your [prebuild upload token](https://github.com/mafintosh/prebuild#create-github-token).
+Also configure your CI environments to set the environment variable `PREBUILD_TOKEN` to your [prebuild upload token](https://github.com/mafintosh/prebuild#create-github-token), and make sure this variable is only set on pull requests from the same repository.
 
 Then, whenever a CI job passes _and_ updates `"version"` in the module's `package.json`, the prebuild for the current environment will be uploaded to GitHub.
 
