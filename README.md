@@ -3,6 +3,13 @@
 
 Use CI like [travis](https://travis-ci.org/) and [appveyor](https://www.appveyor.com/) to auto upload [prebuilds](https://github.com/mafintosh/prebuild).
 
+## Motivation
+
+It's great to provide prebuilds with your native node modules, so consumers don't have to compile them on install - a pre made binary will simply be fetched.
+It can however be cumbersome to create those binaries yourself, you need to run the appropriate scripts on every OS you desire to ship.
+This module provides an alternative by creating and uploading those binaries in the CI environments you use, so for example using travis and appveyor you can
+cover all node versions on mac OS, linux and windows, automatically!
+
 ## Usage
 
 Add `prebuild-ci` to your `"test"` script or CI configuration, like this:
