@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var execSync = require('child_process').execSync
+var exec = require('child_process').exec
 var spawn = require('cross-spawn')
 var npmRunPath = require('npm-run-path-compat')
 
@@ -12,24 +12,30 @@ if (!token) {
   process.exit(1)
 }
 
-function version (rev) {
-  var diff = execSync('git show ' + rev + ':package.json', {
+function version (rev, cb) {
+  exec('git show ' + rev + ':package.json', {
     encoding: 'utf8'
+  }, function (err, diff) {
+    cb(err, diff && JSON.parse(diff).version)
   })
-  if (!diff) return
-  return JSON.parse(diff).version
 }
 
-if (version('HEAD') === version('HEAD~1')) process.exit(0)
+version('HEAD', function (err, head) {
+  if (err) throw err
+  version('HEAD~1', function (err, prev) {
+    if (err) throw err
+    if (head === prev) process.exit(0)
 
-var ps = spawn('prebuild', [
-  '-b', process.version,
-  '-u', token
-], {
-  env: npmRunPath.env()
-})
-ps.stdout.pipe(process.stdout)
-ps.stderr.pipe(process.stderr)
-ps.on('exit', function (code) {
-  process.exit(code)
+    var ps = spawn('prebuild', [
+      '-b', process.version,
+      '-u', token
+    ], {
+      env: npmRunPath.env()
+    })
+    ps.stdout.pipe(process.stdout)
+    ps.stderr.pipe(process.stderr)
+    ps.on('exit', function (code) {
+      process.exit(code)
+    })
+  })
 })
