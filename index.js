@@ -2,7 +2,7 @@
 
 var execSync = require('child_process').execSync
 var spawn = require('cross-spawn')
-var npmRunPath = require('npm-run-path')
+var npmRunPath = require('npm-run-path-compat')
 
 if (!process.env.CI) process.exit()
 
