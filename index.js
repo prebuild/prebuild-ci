@@ -9,7 +9,7 @@ if (!process.env.CI) process.exit()
 var token = process.env.PREBUILD_TOKEN
 if (!token) {
   console.error('PREBUILD_TOKEN required')
-  process.exit(1)
+  process.exit(0)
 }
 
 function version (rev, cb) {
