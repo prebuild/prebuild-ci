@@ -4,8 +4,8 @@
   "repository": "juliangruber/prebuild-ci",
   "license": "MIT",
   "description": "Use CI to auto upload prebuilds",
-  "scripts": {
-    "prebuild-ci": "index.js"
+  "bin": {
+    "prebuild-ci": "./index.js"
   },
   "dependencies": {
     "cross-spawn": "^5.0.1",
