@@ -28,7 +28,8 @@ version('HEAD', function (err, head) {
 
     var ps = spawn('prebuild', [
       '-b', process.version,
-      '-u', token
+      '-u', token,
+      '--verbose'
     ], {
       env: npmRunPath.env()
     })
