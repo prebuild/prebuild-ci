@@ -26,6 +26,8 @@ Then, whenever a CI job passes _and_ updates `"version"` in the module's `packag
 
 That means that in order to have prebuilds for all desired os / node combinations, make sure to run each of those in a CI job.
 
+__Pro Tipp:__ In order for prebuilds to be available as soon as a new version is published to npm, wait with the actual `npm publish` until all the CI jobs have completed.
+
 ## Installation
 
 ```bash
