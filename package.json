@@ -10,5 +10,11 @@
   "dependencies": {
     "cross-spawn": "^5.0.1",
     "npm-run-path-compat": "^2.0.3"
+  },
+  "devDependencies": {
+    "standard": "^8.6.0"
+  },
+  "scripts": {
+    "test": "standard"
   }
 }
