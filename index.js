@@ -6,6 +6,7 @@ var npmRunPath = require('npm-run-path-compat')
 var os = require('os')
 var log = require('npmlog')
 var version = require('./package').version
+var getTarget = require('node-abi').getTarget
 
 if (!process.env.CI) process.exit()
 
@@ -60,6 +61,13 @@ getPackageVersion('HEAD', function (err, head) {
       if (err) process.exit(code)
       if (os.platform() !== 'linux') {
         log.info('OS not linux, skipping electron')
+        process.exit(0)
+      }
+
+      try {
+        getTarget(process.versions.modules, 'electron')
+      } catch (err) {
+        log.info('No matching electron version, exiting')
         process.exit(0)
       }
 
