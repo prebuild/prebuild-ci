@@ -4,12 +4,17 @@ var exec = require('child_process').exec
 var spawn = require('cross-spawn')
 var npmRunPath = require('npm-run-path-compat')
 var os = require('os')
+var log = require('npmlog')
+var version = require('./package').version
 
 if (!process.env.CI) process.exit()
 
+log.heading = 'prebuild-ci'
+log.level = 'verbose'
+
 var token = process.env.PREBUILD_TOKEN
 if (!token) {
-  console.error('PREBUILD_TOKEN required')
+  log.error('PREBUILD_TOKEN required')
   process.exit(0)
 }
 
@@ -38,18 +43,31 @@ function prebuild (runtime, version, cb) {
   })
 }
 
+log.info('begin', 'Prebuild-CI version', version)
+log.info('begin', 'Abi', process.versions.modules)
+
 getPackageVersion('HEAD', function (err, head) {
   if (err) throw err
 
   getPackageVersion('HEAD~1', function (err, prev) {
     if (err) throw err
-    if (head === prev) process.exit(0)
+    if (head === prev) {
+      log.info('No version bump, exiting')
+      process.exit(0)
+    }
 
+    log.info('Build for target=node')
     prebuild('node', process.versions.modules, function (err, code) {
       if (err) process.exit(code)
-      if (os.platform() !== 'linux') process.exit(0)
+      if (os.platform() !== 'linux') {
+        log.info('OS not linux, skipping electron')
+        process.exit(0)
+      }
 
+      log.info('Build for target=electron')
       prebuild('electron', process.versions.modules, function (err, code) {
+        if (err) process.exit(code)
+        log.info('All done!')
         process.exit(code)
       })
     })
