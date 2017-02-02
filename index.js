@@ -3,6 +3,7 @@
 var exec = require('child_process').exec
 var spawn = require('cross-spawn')
 var npmRunPath = require('npm-run-path-compat')
+var os = require('os')
 
 if (!process.env.CI) process.exit()
 
@@ -46,6 +47,7 @@ getPackageVersion('HEAD', function (err, head) {
 
     prebuild('node', process.versions.modules, function (err, code) {
       if (err) process.exit(code)
+      if (os.platform() !== 'linux') process.exit(0)
 
       prebuild('electron', process.versions.modules, function (err, code) {
         process.exit(code)
