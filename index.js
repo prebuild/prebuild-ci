@@ -22,7 +22,7 @@ function getPackageVersion (rev, cb) {
 
 function prebuild (runtime, version, cb) {
   var ps = spawn('prebuild', [
-    '-b', process.version,
+    '-b', version,
     '-u', token,
     '-r', runtime,
     '--verbose'
