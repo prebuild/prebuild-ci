@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "cross-spawn": "^5.0.1",
-    "minimist": "^1.2.0",
     "npm-run-path-compat": "^2.0.3"
   },
   "devDependencies": {
