@@ -45,7 +45,6 @@ function prebuild (runtime, target, cb) {
 }
 
 log.info('begin', 'Prebuild-CI version', version)
-log.info('begin', 'Abi', process.versions.modules)
 
 getPackageVersion('HEAD', function (err, head) {
   if (err) throw err
