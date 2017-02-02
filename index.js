@@ -27,10 +27,11 @@ function getPackageVersion (rev, cb) {
 }
 
 function prebuild (runtime, version, cb) {
+  log.info('build', runtime, version)
   var ps = spawn('prebuild', [
+    '-r', runtime,
     '-b', version,
     '-u', token,
-    '-r', runtime,
     '--verbose'
   ], {
     env: npmRunPath.env()
@@ -56,7 +57,6 @@ getPackageVersion('HEAD', function (err, head) {
       process.exit(0)
     }
 
-    log.info('Build for target=node')
     prebuild('node', process.versions.modules, function (err, code) {
       if (err) process.exit(code)
       if (os.platform() !== 'linux') {
@@ -64,7 +64,6 @@ getPackageVersion('HEAD', function (err, head) {
         process.exit(0)
       }
 
-      log.info('Build for target=electron')
       prebuild('electron', process.versions.modules, function (err, code) {
         if (err) process.exit(code)
         log.info('All done!')
