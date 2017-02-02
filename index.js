@@ -26,11 +26,11 @@ function getPackageVersion (rev, cb) {
   })
 }
 
-function prebuild (runtime, version, cb) {
-  log.info('build', runtime, version)
+function prebuild (runtime, target, cb) {
+  log.info('build', runtime, 'abi', target)
   var ps = spawn('prebuild', [
     '-r', runtime,
-    '-b', version,
+    '-t', target,
     '-u', token,
     '--verbose'
   ], {
