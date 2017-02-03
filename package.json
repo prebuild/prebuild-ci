@@ -9,6 +9,14 @@
   },
   "dependencies": {
     "cross-spawn": "^5.0.1",
-    "npm-run-path-compat": "^2.0.3"
+    "node-abi": "^1.3.0",
+    "npm-run-path-compat": "^2.0.3",
+    "npmlog": "^4.0.2"
+  },
+  "devDependencies": {
+    "standard": "^8.6.0"
+  },
+  "scripts": {
+    "test": "standard"
   }
 }
