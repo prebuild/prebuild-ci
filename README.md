@@ -3,6 +3,8 @@
 
 Use CI like [travis](https://travis-ci.org/) and [appveyor](https://www.appveyor.com/) to auto upload [prebuilds](https://github.com/mafintosh/prebuild).
 
+Requires you to use prebuild@6 or later.
+
 ## Motivation
 
 It's great to provide prebuilds with your native node modules, so consumers don't have to compile them on install - a pre made binary will simply be fetched.
