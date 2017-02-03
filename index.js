@@ -3,7 +3,6 @@
 var exec = require('child_process').exec
 var spawn = require('cross-spawn')
 var npmRunPath = require('npm-run-path-compat')
-var os = require('os')
 var log = require('npmlog')
 var version = require('./package').version
 var getTarget = require('node-abi').getTarget
@@ -59,10 +58,6 @@ getPackageVersion('HEAD', function (err, head) {
 
     prebuild('node', process.versions.modules, function (err, code) {
       if (err) process.exit(code)
-      if (os.platform() !== 'linux') {
-        log.info('OS not linux, skipping electron')
-        process.exit(0)
-      }
 
       try {
         getTarget(process.versions.modules, 'electron')
