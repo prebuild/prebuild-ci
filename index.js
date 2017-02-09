@@ -59,17 +59,20 @@ getPackageVersion('HEAD', function (err, head) {
     prebuild('node', process.versions.modules, function (err, code) {
       if (err) process.exit(code)
 
-      try {
-        getTarget(process.versions.modules, 'electron')
-      } catch (err) {
-        log.info('No matching electron version, exiting')
-        process.exit(0)
-      }
+      log.info('build', 'Trying oddball electron version')
+      prebuild('electron', '50', function () {
+        try {
+          getTarget(process.versions.modules, 'electron')
+        } catch (err) {
+          log.info('No matching electron version, exiting')
+          process.exit(0)
+        }
 
-      prebuild('electron', process.versions.modules, function (err, code) {
-        if (err) process.exit(code)
-        log.info('All done!')
-        process.exit(code)
+        prebuild('electron', process.versions.modules, function (err, code) {
+          if (err) process.exit(code)
+          log.info('All done!')
+          process.exit(code)
+        })
       })
     })
   })
