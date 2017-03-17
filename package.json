@@ -1,6 +1,6 @@
 {
   "name": "prebuild-ci",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "repository": "prebuild/prebuild-ci",
   "license": "MIT",
   "description": "Use CI to auto upload prebuilds",
