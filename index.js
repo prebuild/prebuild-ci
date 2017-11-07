@@ -26,6 +26,12 @@ function getPackageVersion (rev, cb) {
   })
 }
 
+function getCurrentCommitDescription (cb) {
+  exec('git log -1 --pretty=%b', {
+    encoding: 'utf8'
+  }, cb)
+}
+
 function prebuild (runtime, target, cb) {
   log.info('build', runtime, 'abi', target)
   var ps = spawn('prebuild', [
@@ -51,28 +57,33 @@ getPackageVersion('HEAD', function (err, head) {
 
   getPackageVersion('HEAD~1', function (err, prev) {
     if (err) throw err
-    if (head === prev) {
-      log.info('No version bump, exiting')
-      process.exit(0)
-    }
 
-    prebuild('node', process.versions.modules, function (err, code) {
-      if (err) process.exit(code)
+    getCurrentCommitDescription(function (err, msg) {
+      if (err) throw err
 
-      log.info('build', 'Trying oddball electron versions')
-      prebuild('electron', '50', function () {
-        prebuild('electron', '53', function () {
-          try {
-            getTarget(process.versions.modules, 'electron')
-          } catch (err) {
-            log.info('No matching electron version, exiting')
-            process.exit(0)
-          }
+      if ((head === prev) && (msg.indexOf('FORCE_PREBUILD') === -1)) {
+        log.info('No version bump, exiting')
+        process.exit(0)
+      }
 
-          prebuild('electron', process.versions.modules, function (err, code) {
-            if (err) process.exit(code)
-            log.info('All done!')
-            process.exit(code)
+      prebuild('node', process.versions.modules, function (err, code) {
+        if (err) process.exit(code)
+
+        log.info('build', 'Trying oddball electron versions')
+        prebuild('electron', '50', function () {
+          prebuild('electron', '53', function () {
+            try {
+              getTarget(process.versions.modules, 'electron')
+            } catch (err) {
+              log.info('No matching electron version, exiting')
+              process.exit(0)
+            }
+
+            prebuild('electron', process.versions.modules, function (err, code) {
+              if (err) process.exit(code)
+              log.info('All done!')
+              process.exit(code)
+            })
           })
         })
       })
