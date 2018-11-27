@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var exec = require('child_process').exec
 var spawn = require('cross-spawn')
 var npmRunPath = require('npm-run-path-compat')
 var log = require('npmlog')
+var versionChanged = require('version-changed')
 var version = require('./package').version
 var getTarget = require('node-abi').getTarget
 
@@ -16,14 +16,6 @@ var token = process.env.PREBUILD_TOKEN
 if (!token) {
   log.error('PREBUILD_TOKEN required')
   process.exit(0)
-}
-
-function getPackageVersion (rev, cb) {
-  exec('git show ' + rev + ':package.json', {
-    encoding: 'utf8'
-  }, function (err, diff) {
-    cb(err, diff && JSON.parse(diff).version)
-  })
 }
 
 function prebuild (runtime, target, cb) {
@@ -46,34 +38,30 @@ function prebuild (runtime, target, cb) {
 
 log.info('begin', 'Prebuild-CI version', version)
 
-getPackageVersion('HEAD', function (err, head) {
+versionChanged(function (err, changed) {
   if (err) throw err
+  if (!changed) {
+    log.info('No version bump, exiting')
+    process.exit(0)
+  }
 
-  getPackageVersion('HEAD~1', function (err, prev) {
-    if (err) throw err
-    if (head === prev) {
-      log.info('No version bump, exiting')
-      process.exit(0)
-    }
+  prebuild('node', process.versions.modules, function (err, code) {
+    if (err) process.exit(code)
 
-    prebuild('node', process.versions.modules, function (err, code) {
-      if (err) process.exit(code)
+    log.info('build', 'Trying oddball electron versions')
+    prebuild('electron', '50', function () {
+      prebuild('electron', '53', function () {
+        try {
+          getTarget(process.versions.modules, 'electron')
+        } catch (err) {
+          log.info('No matching electron version, exiting')
+          process.exit(0)
+        }
 
-      log.info('build', 'Trying oddball electron versions')
-      prebuild('electron', '50', function () {
-        prebuild('electron', '53', function () {
-          try {
-            getTarget(process.versions.modules, 'electron')
-          } catch (err) {
-            log.info('No matching electron version, exiting')
-            process.exit(0)
-          }
-
-          prebuild('electron', process.versions.modules, function (err, code) {
-            if (err) process.exit(code)
-            log.info('All done!')
-            process.exit(code)
-          })
+        prebuild('electron', process.versions.modules, function (err, code) {
+          if (err) process.exit(code)
+          log.info('All done!')
+          process.exit(code)
         })
       })
     })
