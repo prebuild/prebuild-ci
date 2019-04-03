@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-var spawn = require('cross-spawn')
-var npmRunPath = require('npm-run-path-compat')
-var log = require('npmlog')
-var versionChanged = require('version-changed')
-var version = require('./package').version
-var getTarget = require('node-abi').getTarget
+const spawn = require('cross-spawn')
+const npmRunPath = require('npm-run-path-compat')
+const log = require('npmlog')
+const versionChanged = require('version-changed')
+const version = require('./package').version
+const getTarget = require('node-abi').getTarget
 
 if (!process.env.CI) process.exit()
 
 log.heading = 'prebuild-ci'
 log.level = 'verbose'
 
-var token = process.env.PREBUILD_TOKEN
+const token = process.env.PREBUILD_TOKEN
 if (!token) {
   log.error('PREBUILD_TOKEN required')
   process.exit(0)
@@ -20,7 +20,7 @@ if (!token) {
 
 function prebuild (runtime, target, cb) {
   log.info('build', runtime, 'abi', target)
-  var ps = spawn('prebuild', [
+  const ps = spawn('prebuild', [
     '-r', runtime,
     '-t', target,
     '-u', token,
