@@ -5,7 +5,9 @@ const npmRunPath = require('npm-run-path-compat')
 const log = require('npmlog')
 const versionChanged = require('version-changed')
 const version = require('./package').version
-const getTarget = require('node-abi').getTarget
+const runSeries = require('run-series')
+const supportedTargets = require('node-abi').supportedTargets
+const buildTargets = require('./build-targets')
 
 if (!process.env.CI) process.exit()
 
@@ -45,25 +47,16 @@ versionChanged(function (err, changed) {
     process.exit(0)
   }
 
-  prebuild('node', process.versions.modules, function (err, code) {
-    if (err) process.exit(code)
-
-    log.info('build', 'Trying oddball electron versions')
-    prebuild('electron', '50', function () {
-      prebuild('electron', '53', function () {
-        try {
-          getTarget(process.versions.modules, 'electron')
-        } catch (err) {
-          log.info('No matching electron version, exiting')
-          process.exit(0)
-        }
-
-        prebuild('electron', process.versions.modules, function (err, code) {
-          if (err) process.exit(code)
-          log.info('All done!')
-          process.exit(code)
-        })
-      })
+  const builds = buildTargets(process.versions.modules, supportedTargets)
+    .map(function (target) {
+      return function (cb) {
+        prebuild(target.runtime, target.abi, cb)
+      }
     })
+
+  runSeries(builds, function (err) {
+    if (err) process.exit(1)
+    log.info('All done!')
+    process.exit(0)
   })
 })
