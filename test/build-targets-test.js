@@ -26,43 +26,70 @@ const supportedTargets = [
 
 test('build targets using Node 6 (ABI 48)', function (t) {
   t.plan(1)
-  const targets = buildTargets('48', supportedTargets)
+  const targets = buildTargets({ node: '6.0.0', modules: '48' }, supportedTargets, {})
   t.deepEqual(targets, [
-    { runtime: 'node', abi: '48' },
-    { runtime: 'electron', abi: '48' },
-    { runtime: 'electron', abi: '49' },
-    { runtime: 'electron', abi: '50' },
-    { runtime: 'electron', abi: '53' },
-    { runtime: 'electron', abi: '54' },
-    { runtime: 'electron', abi: '69' }
+    { runtime: 'node', abi: '48', target: '6.0.0' },
+    { runtime: 'electron', abi: '48', target: '1.1.0' },
+    { runtime: 'electron', abi: '49', target: '1.3.0' },
+    { runtime: 'electron', abi: '50', target: '1.4.0' },
+    { runtime: 'electron', abi: '53', target: '1.6.0' },
+    { runtime: 'electron', abi: '54', target: '1.7.0' },
+    { runtime: 'electron', abi: '69', target: '4.0.4' }
   ])
 })
 
 test('build targets using Node 8 (ABI 57)', function (t) {
   t.plan(1)
-  const targets = buildTargets('57', supportedTargets)
+  const targets = buildTargets({ node: '8.0.0', modules: '57' }, supportedTargets, {})
   t.deepEqual(targets, [
-    { runtime: 'node', abi: '57' },
-    { runtime: 'electron', abi: '57' },
-    { runtime: 'electron', abi: '69' }
+    { runtime: 'node', abi: '57', target: '8.0.0' },
+    { runtime: 'electron', abi: '57', target: '1.8.0' },
+    { runtime: 'electron', abi: '57', target: '2.0.0' },
+    { runtime: 'electron', abi: '69', target: '4.0.4' }
   ])
 })
 
 test('build targets using Node 10 (ABI 64)', function (t) {
   t.plan(1)
-  const targets = buildTargets('64', supportedTargets)
+  const targets = buildTargets({ node: '10.0.0', modules: '64' }, supportedTargets, {})
   t.deepEqual(targets, [
-    { runtime: 'node', abi: '64' },
-    { runtime: 'electron', abi: '64' },
-    { runtime: 'electron', abi: '69' }
+    { runtime: 'node', abi: '64', target: '10.0.0' },
+    { runtime: 'electron', abi: '64', target: '3.0.0' },
+    { runtime: 'electron', abi: '64', target: '4.0.0' },
+    { runtime: 'electron', abi: '69', target: '4.0.4' }
   ])
 })
 
 test('build targets using Node 11 (ABI 67)', function (t) {
   t.plan(1)
-  const targets = buildTargets('67', supportedTargets)
+  const targets = buildTargets({ node: '11.0.0', modules: '67' }, supportedTargets, {})
   t.deepEqual(targets, [
-    { runtime: 'node', abi: '67' },
-    { runtime: 'electron', abi: '69' }
+    { runtime: 'node', abi: '67', target: '11.0.0' },
+    { runtime: 'electron', abi: '69', target: '4.0.4' }
+  ])
+})
+
+test('build targets using Node 12 (ABI 72)', function (t) {
+  t.plan(1)
+  const targets = buildTargets({ node: '12.0.0', modules: '72' }, supportedTargets, {})
+  t.deepEqual(targets, [
+    { runtime: 'node', abi: '72', target: '12.0.0' }
+  ])
+})
+
+test('build napi targets when napi_versions found', function (t) {
+  t.plan(1)
+  const targets = buildTargets({ node: '10.0.0', modules: '64' }, supportedTargets, {
+    binary: {
+      napi_versions: [3, 4]
+    }
+  })
+  t.deepEqual(targets, [
+    { runtime: 'node', abi: '64', target: '10.0.0' },
+    { runtime: 'electron', abi: '64', target: '3.0.0' },
+    { runtime: 'electron', abi: '64', target: '4.0.0' },
+    { runtime: 'electron', abi: '69', target: '4.0.4' },
+    { runtime: 'napi', target: '3' },
+    { runtime: 'napi', target: '4' }
   ])
 })

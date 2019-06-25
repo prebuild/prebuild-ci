@@ -8,6 +8,8 @@ const version = require('./package').version
 const runSeries = require('run-series')
 const supportedTargets = require('node-abi').supportedTargets
 const buildTargets = require('./build-targets')
+const path = require('path')
+const pkg = require(path.resolve('package.json'))
 
 if (!process.env.CI) process.exit()
 
@@ -47,10 +49,10 @@ versionChanged(function (err, changed) {
     process.exit(0)
   }
 
-  const builds = buildTargets(process.versions.modules, supportedTargets)
+  const builds = buildTargets(process.versions, supportedTargets, pkg)
     .map(function (target) {
       return function (cb) {
-        prebuild(target.runtime, target.abi, cb)
+        prebuild(target.runtime, target.target, cb)
       }
     })
 
