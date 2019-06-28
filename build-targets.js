@@ -23,7 +23,7 @@ function buildTargets (currentNode, supportedTargets, pkg) {
     .filter(target => !nodeAbis.includes(target.abi))
     .map(cleanTarget)
 
-  // N-API, requires node-addon-api and napi_versions
+  // N-API versions, requires napi_versions to be set
   const napiTargets = []
   if (pkg.binary && pkg.binary.napi_versions) {
     pkg.binary.napi_versions.forEach(napiVersion => {
