@@ -19,7 +19,8 @@ function buildTargets (currentNode, supportedTargets, pkg) {
     .filter(target => target.runtime === 'node')
     .map(target => target.abi)
   const oddballElectronTargets = supportedTargets
-    .filter(target => target.runtime === 'electron' && target.abi >= currentNode.modules && !nodeAbis.includes(target.abi))
+    .filter(target => target.runtime === 'electron' && target.abi >= currentNode.modules)
+    .filter(target => !nodeAbis.includes(target.abi))
     .map(cleanTarget)
 
   // N-API, requires node-addon-api and napi_versions
