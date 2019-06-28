@@ -1,39 +1,45 @@
-function buildTargets (currentNodeAbi, supportedTargets) {
+function cleanTarget ({ runtime, abi, target }) {
+  return { runtime, abi, target }
+}
+
+function buildTargets (currentNode, supportedTargets, pkg) {
+  const nodeTarget = {
+    runtime: 'node',
+    abi: currentNode.modules,
+    target: currentNode.node
+  }
+
+  // Electron versions with the same ABI as current Node ABI
+  const electronTargets = supportedTargets
+    .filter(target => target.runtime === 'electron' && target.abi === currentNode.modules)
+    .map(cleanTarget)
+
+  // Oddball Electron versions, where no version of Node has the same ABI
   const nodeAbis = supportedTargets
     .filter(target => target.runtime === 'node')
     .map(target => target.abi)
+  const oddballElectronTargets = supportedTargets
+    .filter(target => target.runtime === 'electron' && target.abi >= currentNode.modules)
+    .filter(target => !nodeAbis.includes(target.abi))
+    .map(cleanTarget)
 
-  const electronAbis = supportedTargets
-    .filter(target => target.runtime === 'electron')
-    .map(target => target.abi)
-
-  const oddballElectronAbis = electronAbis.filter(
-    electronAbi =>
-      electronAbi >= currentNodeAbi && !nodeAbis.includes(electronAbi)
-  )
-
-  // Current Node ABI
-  const targets = [
-    {
-      runtime: 'node',
-      abi: currentNodeAbi
-    }
-  ]
-  // Electron with same ABI as current Node
-  if (electronAbis.includes(currentNodeAbi)) {
-    targets.push({
-      runtime: 'electron',
-      abi: currentNodeAbi
+  // N-API versions, requires napi_versions to be set
+  const napiTargets = []
+  if (pkg.binary && pkg.binary.napi_versions) {
+    pkg.binary.napi_versions.forEach(napiVersion => {
+      napiTargets.push({
+        runtime: 'napi',
+        target: String(napiVersion)
+      })
     })
   }
-  // Oddball Electron ABIs
-  oddballElectronAbis.forEach(oddballAbi => {
-    targets.push({
-      runtime: 'electron',
-      abi: oddballAbi
-    })
-  })
-  return targets
+
+  return [
+    nodeTarget,
+    ...electronTargets,
+    ...oddballElectronTargets,
+    ...napiTargets
+  ]
 }
 
 module.exports = buildTargets
