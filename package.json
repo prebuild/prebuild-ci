@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "cross-spawn": "^6.0.5",
-    "node-abi": "^2.7.1",
+    "node-abi": "^3.5.0",
     "npm-run-path-compat": "^2.0.3",
     "npmlog": "^4.1.2",
     "run-series": "^1.1.8",
@@ -28,6 +28,6 @@
   "repository": "prebuild/prebuild-ci",
   "homepage": "https://github.com/prebuild/prebuild-ci",
   "engines": {
-    "node": ">=6"
+    "node": ">=10"
   }
 }
