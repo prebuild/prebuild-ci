@@ -2,9 +2,7 @@
 
 const spawn = require('cross-spawn')
 const npmRunPath = require('npm-run-path-compat')
-const log = require('npmlog')
 const versionChanged = require('version-changed')
-const version = require('./package').version
 const runSeries = require('run-series')
 const supportedTargets = require('node-abi').supportedTargets
 const buildTargets = require('./build-targets')
@@ -13,17 +11,14 @@ const pkg = require(path.resolve('package.json'))
 
 if (!process.env.CI) process.exit()
 
-log.heading = 'prebuild-ci'
-log.level = 'verbose'
-
 const token = process.env.PREBUILD_TOKEN
 if (!token) {
-  log.error('PREBUILD_TOKEN required')
+  console.error('[prebuild-ci] Skipping: PREBUILD_TOKEN required.')
   process.exit(0)
 }
 
 function prebuild (runtime, target, cb) {
-  log.info('build', runtime, 'abi', target)
+  console.log('[prebuild-ci] Build %s abi %s', runtime, target)
   const ps = spawn('prebuild', [
     '-r', runtime,
     '-t', target,
@@ -40,12 +35,10 @@ function prebuild (runtime, target, cb) {
   })
 }
 
-log.info('begin', 'Prebuild-CI version', version)
-
 versionChanged(function (err, changed) {
   if (err) throw err
   if (!changed) {
-    log.info('No version bump, exiting')
+    console.error('[prebuild-ci] Skipping: no version bump.')
     process.exit(0)
   }
 
@@ -58,7 +51,6 @@ versionChanged(function (err, changed) {
 
   runSeries(builds, function (err) {
     if (err) process.exit(1)
-    log.info('All done!')
     process.exit(0)
   })
 })
