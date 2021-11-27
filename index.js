@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 
 const spawn = require('cross-spawn')
 const npmRunPath = require('npm-run-path-compat')

@@ -1,3 +1,5 @@
+'use strict'
+
 function cleanTarget ({ runtime, abi, target }) {
   return { runtime, abi, target }
 }
