@@ -14,7 +14,7 @@
     "build-targets.js"
   ],
   "dependencies": {
-    "cross-spawn": "^6.0.5",
+    "cross-spawn": "^7.0.3",
     "node-abi": "^3.5.0",
     "npm-run-path-compat": "^2.0.3",
     "npmlog": "^4.1.2",
