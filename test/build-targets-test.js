@@ -1,5 +1,6 @@
-const test = require('tape')
+'use strict'
 
+const test = require('tape')
 const buildTargets = require('../build-targets')
 
 const supportedTargets = [
