@@ -1,11 +1,11 @@
 # prebuild-ci
 
-Use CI like [Travis](https://travis-ci.org/) and [AppVeyor](https://www.appveyor.com/) to auto upload [prebuilds](https://github.com/prebuild/prebuild). Requires you to use `prebuild@6` or later.
+Use CI like GitHub Actions, [Travis](https://travis-ci.org/) and [AppVeyor](https://www.appveyor.com/) to auto upload [prebuilds](https://github.com/prebuild/prebuild). Requires you to use `prebuild@6` or later.
 
 [![npm](https://img.shields.io/npm/v/prebuild-ci.svg)](https://www.npmjs.com/package/prebuild-ci)
 [![Node version](https://img.shields.io/node/v/prebuild-ci.svg)](https://www.npmjs.com/package/prebuild-ci)
-[![Travis](https://img.shields.io/travis/prebuild/prebuild-ci.svg)](https://travis-ci.org/prebuild/prebuild-ci)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Test](https://img.shields.io/github/workflow/status/prebuild/prebuild-ci/Test?label=test)](https://github.com/prebuild/prebuild-ci/actions/workflows/test.yml)
+[![Standard](https://img.shields.io/badge/standard-informational?logo=javascript&logoColor=fff)](https://standardjs.com)
 
 ## Motivation
 
