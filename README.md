@@ -1,10 +1,12 @@
 # prebuild-ci
 
+> [!IMPORTANT]
+> This module is deprecated and no longer maintained, along with `prebuild` and `prebuild-install`. Please see [prebuild/prebuild-install#216](https://github.com/prebuild/prebuild-install/issues/216). Thank you!
+
 Use CI like GitHub Actions, [Travis](https://travis-ci.org/) and [AppVeyor](https://www.appveyor.com/) to auto upload [prebuilds](https://github.com/prebuild/prebuild). Requires you to use `prebuild@6` or later.
 
 [![npm](https://img.shields.io/npm/v/prebuild-ci.svg)](https://www.npmjs.com/package/prebuild-ci)
 [![Node version](https://img.shields.io/node/v/prebuild-ci.svg)](https://www.npmjs.com/package/prebuild-ci)
-[![Test](https://img.shields.io/github/workflow/status/prebuild/prebuild-ci/Test?label=test)](https://github.com/prebuild/prebuild-ci/actions/workflows/test.yml)
 [![Standard](https://img.shields.io/badge/standard-informational?logo=javascript&logoColor=fff)](https://standardjs.com)
 
 ## Motivation
